@@ -1,1 +1,6 @@
-
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://8.130.121.208/sliver_dev
+    username: sliver_dev
+    password: C6XkjisfT8fZLica

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -34,8 +36,10 @@ public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticat
         MyUserDetails loginUser = (MyUserDetails) authentication.getPrincipal();
         int userid = loginUser.getUser().getId();
         String token = userTokenService.saveUserToken(userid);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
         ResponseResult<Object> unauthorizedResponse = new ResponseResult<>(
-                ResponseResult.LoginOk, "登录成功", token);
+                ResponseResult.LoginOk, "登录成功", map);
 
         // 将 ResponseResult 对象转换为 JSON 字符串
         String jsonResponse = new ObjectMapper().writeValueAsString(unauthorizedResponse);

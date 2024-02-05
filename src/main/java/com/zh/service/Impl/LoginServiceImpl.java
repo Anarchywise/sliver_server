@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -42,10 +44,12 @@ public class LoginServiceImpl implements LoginService {
         MyUserDetails loginUser = (MyUserDetails) authentication.getPrincipal();
         int userid = loginUser.getUser().getId();
         String token = userTokenService.saveUserToken(userid);
+        Map<String,String> map = new HashMap<>();
+        map.put("token",token);
 
         //把用户存入SecurityContextHolder? 不需要,调用其他接口都用JWT
 
         //返回登录结果
-        return new ResponseResult<>(ResponseResult.LoginOk, "登录成功", token);
+        return new ResponseResult<>(ResponseResult.LoginOk, "登录成功", map);
     }
 }

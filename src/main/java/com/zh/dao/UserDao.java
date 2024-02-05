@@ -24,6 +24,9 @@ public interface UserDao {
     @Delete("delete from User where id =#{id}")
     void deleteById(int id);
 
+    @Delete("delete from User where username =#{username}")
+    void deleteByUsername(String username);
+
     @Insert("insert into User (username, nickname, password, email, phone) values (#{username},#{nickname},#{password},#{email},#{phone})" )
     void insert(User user);
 }

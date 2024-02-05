@@ -4,3 +4,17 @@ spring:
     url: jdbc:mysql://8.130.121.208/sliver_dev
     username: sliver_dev
     password: C6XkjisfT8fZLica
+    hikari:
+      allow-pool-suspension: true
+      auto-commit: true
+      maxLifetime: 60000
+      idleTimeout: 30000
+      minimumIdle: 5
+      maximumPoolSize: 10
+
+  security:
+    user:
+      name: zhdiwnd
+      password: 198105
+server:
+  port: 8080

@@ -7,6 +7,10 @@
 #idea file
 /.idea
 
+#my file
+sqlFile
+Konwledge
+
 # BlueJ files
 *.ctxt
 

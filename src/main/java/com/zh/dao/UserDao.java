@@ -1,10 +1,7 @@
 package com.zh.dao;
 
 import com.zh.domain.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 
@@ -28,5 +25,12 @@ public interface UserDao {
     void deleteByUsername(String username);
 
     @Insert("insert into User (username, nickname, password, email, phone) values (#{username},#{nickname},#{password},#{email},#{phone})" )
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
+
+    @Update("update User set password = #{password} where username = #{username}")
+    void updatePassword(User user);
+
+    @Update("update User set nickname = #{nickname} where username = #{username}")
+    void updateNickname(User user);
 }

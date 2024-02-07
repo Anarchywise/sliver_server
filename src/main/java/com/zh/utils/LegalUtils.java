@@ -11,6 +11,10 @@ public class LegalUtils {
     private static final String PHONE_NUMBER_REGEX = "^1[3456789]\\d{9}$";
 
     private final static int PasswordMaxLength = 20;
+
+    private final static int NicknameMaxLength = 10;
+
+
     public static ResponseResult<Object> verifyPhone(String phoneNumber){
         //检查用户传入的号码的合法性
         if (phoneNumber == null || phoneNumber.isEmpty()) {
@@ -38,6 +42,11 @@ public class LegalUtils {
             return new ResponseResult<>(ResponseResult.IllegalPassword, "密码不符合规定", null);
         }
 
+        return null;
+    }
+
+    public static ResponseResult<Object> verifyNickname(String nickname){
+        if(nickname.length()>NicknameMaxLength) return new ResponseResult<>(ResponseResult.IllegalNickname, "昵称不符合规定", null);
         return null;
     }
 

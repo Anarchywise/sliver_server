@@ -25,6 +25,7 @@ public class AuthCodeServiceImpl implements AuthCodeService {
         if(Objects.isNull(authCode)){
             return new ResponseResult<>(ResponseResult.IllegalAction,"你在干嘛?",null);
         }
+//        AuthCode authCodeInSql = authCodeDao.getByPhone(authCode.getPhone());
         AuthCode authCodeInSql = authCodeDao.getByPhone(authCode.getPhone());
         //是否发送验证码
         if(Objects.isNull(authCodeInSql)){

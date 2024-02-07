@@ -7,12 +7,14 @@ import com.zh.domain.User;
 import com.zh.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -41,13 +43,33 @@ public class JwtAuthenticationLoginFilter extends OncePerRequestFilter {
         //获取token
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
-            filterChain.doFilter(request,response);
-            return; // 结束运行
+            filterChain.doFilter(request,response); //过滤链继续执行
+            return; // 结束运行doFilterInternal
         }
         //解析token
         String user_id;
-        Claims claims;
-        claims = JwtUtils.parseJwtToken(token); //不需要判断JWT是否过期,会在解析token时抛出ExpiredJwtException,
+        Claims claims = null;
+        try{
+            claims = JwtUtils.parseJwtToken(token); //不需要判断JWT是否过期,会在解析token时抛出ExpiredJwtException,
+        }catch (ExpiredJwtException e ){
+            System.out.println("捕获到token过期异常");
+            /// 构建未授权的响应
+            ResponseResult<String> unauthorizedResponse = new ResponseResult<>(
+                    ResponseResult.TokenOutdated, "token已过期", null);
+
+            // 将 ResponseResult 对象转换为 JSON 字符串
+            String jsonResponse = new ObjectMapper().writeValueAsString(unauthorizedResponse);
+
+            // 设置响应的内容类型为 JSON
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            // 将 JSON 写入响应
+            response.getWriter().write(jsonResponse);
+            e.printStackTrace();
+            return;// 结束运行
+        }
+
         user_id = claims.getId();
 
         //获取用户信息,

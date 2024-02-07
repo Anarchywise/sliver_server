@@ -105,6 +105,7 @@ public class RegisterServiceImpl implements RegisterService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userDao.insert(user);
+        System.out.println("新注册的用户为"+user);
         //获取token
         int userid = userDao.getByUsername(user.getUsername()).getId();
         String token = userTokenService.saveUserToken(userid);

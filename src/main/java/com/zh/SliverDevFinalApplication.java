@@ -9,7 +9,7 @@ public class SliverDevFinalApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(SliverDevFinalApplication.class, args);
-        System.out.println(111);
+        System.out.println("Spring boot is working");
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Mapper
-@Repository
 public interface UserDao {
 
     @Select("select * from User where id =#{id}")

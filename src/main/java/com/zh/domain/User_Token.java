@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class User_Token {
-    int user_id;
+    Integer userId;
     String token;
 }

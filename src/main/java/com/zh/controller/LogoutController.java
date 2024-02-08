@@ -16,11 +16,11 @@ public class LogoutController {
     LogoutServiceImpl logoutService;
 
     @PostMapping("/user/attemptLogout")
-    public ResponseResult<Object> attemptRegister(User user){
+    public ResponseResult<Object> attemptRegister(@RequestBody User user){
         return logoutService.attemptLogout(user);
     }
     @PostMapping("/user/codeLogout")
-    public ResponseResult<Object> registerWithCode(User user){
+    public ResponseResult<Object> registerWithCode(@RequestBody User user){
         return logoutService.logoutWithCode(user);
     }
 }

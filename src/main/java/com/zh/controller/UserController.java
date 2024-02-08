@@ -9,10 +9,8 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UserController {
@@ -20,9 +18,9 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
 
-    @GetMapping("/user/details")
-    public ResponseResult<Object> getUserDetail(@RequestHeader("token") String token){
-        return userService.getUserDetails(token);
+    @PostMapping("/user/details")
+    public ResponseResult<Object> getUserDetail(HttpServletRequest request){
+        return userService.getUserDetails(request);
     }
 
     @PostMapping("/user/changePassword")
@@ -39,4 +37,10 @@ public class UserController {
     public ResponseResult<Object> feedback(HttpServletRequest request){
         return userService.feedback(request);
     }
+
+    @PostMapping("/user/uploadHeadPortrait")
+    public ResponseResult<Object> uploadHeadPortrait(HttpServletRequest request, @RequestParam("file") MultipartFile file){
+        return userService.uploadHeadPortrait(request,file);
+    }
+
 }

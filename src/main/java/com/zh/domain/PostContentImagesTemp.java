@@ -5,17 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("Post")
-public class Post {
+@TableName("Content_Images_Temp")
+public class PostContentImagesTemp {
+
     Integer id;
     Integer userId;
-    String title;
-    Timestamp date;
-    Integer contentId;
+    Integer imageOrder;
+    String url;
 }

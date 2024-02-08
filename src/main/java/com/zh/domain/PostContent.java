@@ -1,21 +1,18 @@
 package com.zh.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("Post")
-public class Post {
+@TableName("Post_Content")
+public class PostContent {
+    @TableId(type = IdType.AUTO)
     Integer id;
-    Integer userId;
-    String title;
-    Timestamp date;
-    Integer contentId;
+    String contentText;
 }

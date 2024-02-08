@@ -2,6 +2,8 @@ package com.zh.utils;
 
 import com.zh.domain.ResponseResult;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +50,41 @@ public class LegalUtils {
     public static ResponseResult<Object> verifyNickname(String nickname){
         if(nickname.length()>NicknameMaxLength) return new ResponseResult<>(ResponseResult.IllegalNickname, "昵称不符合规定", null);
         return null;
+    }
+
+    public static ResponseResult<Object> isImageFileName(String fileName) {
+        // 定义常见图片格式的正则表达式
+        System.out.println(fileName);
+        String imageFileRegex = "\\.(?i)(jpg|jpeg|png|gif|bmp)$";
+
+        // 替换正则表达式中的 $ 为 \\$
+        imageFileRegex = imageFileRegex.replace("$", "\\$");
+
+        // 编译正则表达式
+        Pattern pattern = Pattern.compile(imageFileRegex);
+
+        // 编译正则表达式
+        pattern = Pattern.compile(imageFileRegex);
+
+        // 匹配文件名
+        Matcher matcher = pattern.matcher(fileName);
+
+        // 返回匹配结果
+        if(matcher.find()) return new ResponseResult<>(ResponseResult.Error,"图片格式不支持",null);
+        return null;
+    }
+
+    public static String buildAccessPath(long userId, String originalFilename) {
+        // 构建日期格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String formattedDate = dateFormat.format(new Date());
+
+        // 移除文件名中的非法字符
+        String sanitizedFilename = originalFilename.replaceAll("[^a-zA-Z0-9.-]", "_");
+
+        // 构建路径
+        String accessPath = "$" + userId + "$" + "$" + formattedDate + "$" + sanitizedFilename;
+        return accessPath;
     }
 
 }

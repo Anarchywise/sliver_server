@@ -17,16 +17,9 @@ public class LoginController {
     LoginServiceImpl loginService;
 
     @PostMapping("/user/login")
-    public ResponseResult<Object> login(User user){
+    public ResponseResult<Object> login(@RequestBody User user){
         System.out.println("/user/login 被访问");
         return loginService.login(user);
     }
-
-    @PostMapping("/user/loginJson")
-    public ResponseResult<Object> loginJson(@RequestBody User user){
-        System.out.println("/user/login 被访问");
-        return loginService.login(user);
-    }
-
 
 }

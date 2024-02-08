@@ -6,6 +6,7 @@ import com.zh.service.Impl.LoginServiceImpl;
 import com.zh.service.Impl.RegisterServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -17,11 +18,11 @@ public class RegisterController {
     RegisterServiceImpl registerService;
 
     @PostMapping("/user/attemptRegister")
-    public ResponseResult<Object> attemptRegister(User user){
+    public ResponseResult<Object> attemptRegister(@RequestBody User user){
         return registerService.attemptRegister(user);
     }
     @PostMapping("/user/CodeRegister")
-    public ResponseResult<Object> registerWithCode(User user){
+    public ResponseResult<Object> registerWithCode(@RequestBody User user){
         return registerService.registerWithCode(user);
     }
 }

@@ -9,8 +9,9 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReplyRemark {Integer id;
-    Integer userNickname;
+public class ReplyRemark {
+    Integer id;
+    String userNickname;
     String userHeadPortraitUrl;
     String contentText;
     Timestamp date;

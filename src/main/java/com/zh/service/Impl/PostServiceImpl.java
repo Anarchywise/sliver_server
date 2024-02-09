@@ -1,15 +1,9 @@
 package com.zh.service.Impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.zh.dao.*;
 import com.zh.domain.*;
 import com.zh.service.PostService;
-import com.zh.utils.JsonUtils;
-import com.zh.utils.JwtUtils;
 import com.zh.utils.LegalUtils;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,25 +40,16 @@ public class PostServiceImpl implements PostService {
     UserHeadPortraitDao userHeadPortraitDao;
 
     @Autowired
+    UserPostCollectDao userPostCollectDao;
+
+    @Autowired
     PostLikesDao postLikesDao;
 
     @Autowired
     PostRemarkDao postRemarkDao;
 
     @Override
-    public ResponseResult<Object> uploadPostContentImages(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return new ResponseResult<>(ResponseResult.Error, "上传图片为空", null);
-        }
-        //获取请求信息
-        String token = request.getHeader("token");
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        String user_id = claims.getId();
+    public ResponseResult<Object> uploadPostContentImages(int userId, @RequestParam("file") MultipartFile file) {
 
         try {
             // 获取文件名
@@ -75,11 +60,11 @@ public class PostServiceImpl implements PostService {
             String userDir = System.getProperty("user.dir"); // 获取当前工作目录
             String accessPath = null;//构建能够访问的路径
             if (originalFilename != null) {
-                accessPath = "/post/images/" + LegalUtils.buildAccessPath(Integer.parseInt(user_id),originalFilename);
+                accessPath = "/post/images/" + LegalUtils.buildAccessPath(userId,originalFilename);
             }
             String relativePath = null;// 构建相对路径，不包含 JAR 文件的信息
             if (originalFilename != null) {
-                relativePath = "data/post/images/"+ LegalUtils.buildAccessPath(Integer.parseInt(user_id),originalFilename);
+                relativePath = "data/post/images/"+ LegalUtils.buildAccessPath(userId,originalFilename);
             }
             String absolutePath = Paths.get(userDir, relativePath).toString(); // 将当前工作目录与相对路径结合，创建绝对路径
             System.out.println("postUploadFile Absolute Path: " + absolutePath);
@@ -99,9 +84,9 @@ public class PostServiceImpl implements PostService {
             //构建临时上传图像
             PostContentImagesTemp contentImagesTempSaved = new PostContentImagesTemp();
             contentImagesTempSaved.setUrl(accessPath);
-            contentImagesTempSaved.setUserId(Integer.parseInt(user_id));
+            contentImagesTempSaved.setUserId(userId);
             //查询order
-            List<PostContentImagesTemp> contentImagesTemp1 = postContentImagesTempDao.selectByUserIdOrderByImage_orderDescInt(Integer.parseInt(user_id));
+            List<PostContentImagesTemp> contentImagesTemp1 = postContentImagesTempDao.selectByUserIdOrderByImage_orderDescInt(userId);
             if(contentImagesTemp1.isEmpty()){
                 contentImagesTempSaved.setImageOrder(1);
             }else{
@@ -126,21 +111,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseResult<Object> acceptPost(HttpServletRequest request) {
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        String title = jsonNode.get("title").asText();
-        String contentText = jsonNode.get("contentText").asText();
-        //获取请求信息
-        String token = request.getHeader("token");
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        int userId = Integer.parseInt(claims.getId());
+    public ResponseResult<Object> acceptPost(int userId, String title, String contentText) {
         //从ImagesTemp中获取user_id对应的Images
         try {
             List<PostContentImagesTemp> contentImagesTempList = postContentImagesTempDao.selectByUserId(userId);
@@ -244,39 +215,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseResult<Object> getUploadedContentImages(String token){
-        //获取请求信息
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        int userId = Integer.parseInt(claims.getId());
+    public ResponseResult<Object> getUploadedContentImages(int userId){
         try {
             List<PostContentImagesTemp> contentImagesTempList = postContentImagesTempDao.selectByUserId(userId);
             return new ResponseResult<>(ResponseResult.AccessOk,"查询已帖子上传的图片成功",contentImagesTempList);
         }catch (Exception e){
             return new ResponseResult<>(ResponseResult.Error,"服务器出错",null);
         }
-
-
     }
 
     @Override
-    public ResponseResult<Object> postLike(HttpServletRequest request, String token){
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        int postId = Integer.parseInt(jsonNode.get("postId").asText());
-        //解析token
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        int userId = Integer.parseInt(claims.getId());
+    public ResponseResult<Object> postLike(int userId, int postId){
         List<PostLikes> postLikesList = postLikesDao.selectPostLikesByUserIdAndPostId(userId,postId);
         PostLikes postLikes = new PostLikes();
         if (postLikesList.isEmpty()){
@@ -291,19 +240,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseResult<Object> postNoLike(HttpServletRequest request, String token){
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        int postId = Integer.parseInt(jsonNode.get("postId").asText());
-        //解析token
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        int userId = Integer.parseInt(claims.getId());
+    public ResponseResult<Object> postNoLike(int userId, int postId){
+
         List<PostLikes> postLikesList = postLikesDao.selectPostLikesByUserIdAndPostId(userId,postId);
         PostLikes postLikes = new PostLikes();
         if (postLikesList.isEmpty()){
@@ -316,20 +254,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseResult<Object> remark(HttpServletRequest request, String token){
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        int postId = Integer.parseInt(jsonNode.get("postId").asText());
-        String contentText = jsonNode.get("contentText").asText();
-        //解析token
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        int userId = Integer.parseInt(claims.getId());
+    public ResponseResult<Object> remark(int postId, String contentText, int userId){
+
         PostRemark postRemark = new PostRemark();
         try {
             postRemark.setPostId(postId);//post_id
@@ -346,18 +272,54 @@ public class PostServiceImpl implements PostService {
         }
 
     }
+    @Override
+    public ResponseResult<Object> getPostRemark(int postId){
+        try{
+            //查询remarks
+            List<PostRemark> postRemarks = postRemarkDao.selectByPostId(postId);
+            List<ReplyRemark> replyRemarks = new ArrayList<>();
+            //构造返回的ReplyRemarks
+            for(PostRemark postRemark: postRemarks){
+                ReplyRemark replyRemark = new ReplyRemark();
+                replyRemark.setId(postRemark.getId());// id
+                User user = userDao.getById(postRemark.getUserId());
+                List<UserHeadPortrait> userHeadPortraits = userHeadPortraitDao.selectByUser_idUserHeadPortraitList(user.getId());
+                replyRemark.setUserNickname(user.getNickname());//nickname
+                replyRemark.setUserHeadPortraitUrl(userHeadPortraits.get(0).getUrl());//headportraiturl
+                replyRemark.setContentText(postRemark.getContentText());//contentText
+                replyRemark.setDate(postRemark.getDate());//date
+                replyRemarks.add(replyRemark);
+            }
+            return new ResponseResult<>(ResponseResult.AccessOk,"查询评论成功",replyRemarks);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseResult<>(ResponseResult.Error,"服务器出错",null);
+        }
 
-//    public ResponseResult<Object> getPostRemark(HttpServletRequest request){
-//        //获取请求中的json数据
-//        JsonNode jsonNode = JsonUtils.parseRequest(request);
-//        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-//        int postId = Integer.parseInt(jsonNode.get("postId").asText());
-//        //查询remarks
-//        List<PostRemark> postRemarks = postRemarkDao.selectByPostId(postId);
-//        //构造返回的ReplyRemarks
-//        for(PostRemark postRemark: postRemarks){
-//
-//        }
-//
-//    }
+
+
+    }
+    @Override
+    public ResponseResult<Object> postCollect(int postId, int userId){
+        try {
+            UserPostCollect userPostCollect =new UserPostCollect();
+            userPostCollect.setUserId(userId);//userId
+            userPostCollect.setPostId(postId);// postId
+            userPostCollectDao.insert(userPostCollect);
+            return new ResponseResult<>(ResponseResult.AccessOk,"收藏成功",userPostCollect);
+        }catch (Exception e ){
+            e.printStackTrace();
+            return new ResponseResult<>(ResponseResult.Error, "服务器?出错", null);
+        }
+    }
+    @Override
+    public ResponseResult<Object> getUserPostCollects(int userId){
+        try {
+            List<UserPostCollect> userPostCollects = userPostCollectDao.selectByUserId(userId);
+            return new ResponseResult<>(ResponseResult.AccessOk,"查询用户收藏成功",userPostCollects);
+        }catch (Exception e ){
+            e.printStackTrace();
+            return new ResponseResult<>(ResponseResult.Error, "服务器?出错", null);
+        }
+    }
 }

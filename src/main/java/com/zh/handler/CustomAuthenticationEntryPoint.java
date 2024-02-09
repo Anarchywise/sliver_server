@@ -15,6 +15,7 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 
 
+
     /**
      * 认证失败处理类 返回未授权
      * 用来解决匿名用户访问无权限资源时的异常

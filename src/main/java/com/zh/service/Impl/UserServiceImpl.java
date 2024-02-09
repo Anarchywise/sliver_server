@@ -1,22 +1,15 @@
 package com.zh.service.Impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.zh.dao.UserDao;
 import com.zh.dao.UserHeadPortraitDao;
 import com.zh.domain.ResponseResult;
 import com.zh.domain.User;
 import com.zh.domain.UserHeadPortrait;
 import com.zh.service.UserService;
-import com.zh.utils.JsonUtils;
-import com.zh.utils.JwtUtils;
 import com.zh.utils.LegalUtils;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -39,21 +32,12 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public ResponseResult<Object> changePassword(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        String username = jsonNode.get("username").asText();
-        String password = jsonNode.get("password").asText();
-        String changedPassword = jsonNode.get("changedPassword").asText();
+    public ResponseResult<Object> changePassword(String username, int userId, String password, String changedPassword) {
         User user = userDao.getByUsername(username);
         //判断用户是否存在
         if (Objects.isNull(user)) return new ResponseResult<>(ResponseResult.IllegalAction, "用户不存在", null);
-        Claims claims = JwtUtils.parseJwtToken(token);
-        String user_id = claims.getId();
         //用户信息是否和token一致
-        if (Integer.parseInt(user_id) != user.getId())
+        if (userId!= user.getId())
             return new ResponseResult<>(ResponseResult.IllegalAction, "用户名和token数据不匹配", null);
         //判断密码的正确性
         if (!passwordEncoder.matches(password, user.getPassword()))
@@ -65,14 +49,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> getUserDetails(HttpServletRequest request) {
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        String userId = jsonNode.get("userId").asText();
-        String token = request.getHeader("token");
-        Claims claims = JwtUtils.parseJwtToken(token);
-        String userId2 = claims.getId();
+    public ResponseResult<Object> getUserDetails(String userId, String userId2) {
+
         if(userId==null){//没有查询其他用户,返回本人的信息
             User user = userDao.getById(Integer.parseInt(userId2));
             if(!userHeadPortraitDao.selectByUser_idUserHeadPortraitList(user.getId()).isEmpty()){
@@ -95,20 +73,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> changeNickname(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        String username = jsonNode.get("username").asText();
-        String changedNickname = jsonNode.get("changedNickname").asText();
+    public ResponseResult<Object> changeNickname(String username, String userId, String changedNickname) {
         User user = userDao.getByUsername(username);
         //判断用户是否存在
         if (Objects.isNull(user)) return new ResponseResult<>(ResponseResult.IllegalAction, "用户不存在", null);
-        Claims claims = JwtUtils.parseJwtToken(token);
-        String user_id = claims.getId();
         //用户信息是否和token一致
-        if (Integer.parseInt(user_id) != user.getId())
+        if (Integer.parseInt(userId) != user.getId())
             return new ResponseResult<>(ResponseResult.IllegalAction, "用户名和token数据不匹配", null);
         //修改昵称
         ResponseResult<Object> result = null;
@@ -126,19 +96,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> feedback(HttpServletRequest request) {
-        //获取请求信息
-        String token = request.getHeader("token");
-        Claims claims = JwtUtils.parseJwtToken(token);
-        String user_id = claims.getId();
-        //获取请求中的json数据
-        JsonNode jsonNode = JsonUtils.parseRequest(request);
-        String feedback = null;
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        feedback = jsonNode.get("feedback").asText();
+    public ResponseResult<Object> feedback(String userId, String feedback) {
+
         //构建文件路径
         String userDir = System.getProperty("user.dir"); // 获取当前工作目录
-        String relativePath = "data/" + user_id + "feedback.txt";// 构建相对路径，不包含 JAR 文件的信息
+        String relativePath = "data/" + userId + "feedback.txt";// 构建相对路径，不包含 JAR 文件的信息
         String absolutePath = Paths.get(userDir, relativePath).toString(); // 将当前工作目录与相对路径结合，创建绝对路径
         System.out.println("File Absolute Path: " + absolutePath);
         try {
@@ -176,19 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> uploadHeadPortrait(HttpServletRequest request, @RequestParam("file") MultipartFile file){
-        if (file.isEmpty()) {
-            return new ResponseResult<>(ResponseResult.Error, "上传图片为空", null);
-        }
-        //获取请求信息
-        String token = request.getHeader("token");
-        Claims claims;
-        try {
-            claims = JwtUtils.parseJwtToken(token);
-        } catch (ExpiredJwtException e){
-            return new ResponseResult<>(ResponseResult.TokenOutdated,"token已过期",null);
-        }
-        String userId = claims.getId();
+    public ResponseResult<Object> uploadHeadPortrait(String userId, MultipartFile file){
 
         try {
             // 获取文件名

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("Content_Images_Temp")
 public class PostContentImagesTemp {
 
     Integer id;

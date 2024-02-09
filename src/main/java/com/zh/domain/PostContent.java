@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("Post_Content")
 public class PostContent {
     @TableId(type = IdType.AUTO)
     Integer id;

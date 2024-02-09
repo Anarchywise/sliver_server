@@ -8,13 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    ResponseResult<Object> changePassword(HttpServletRequest request);
+    ResponseResult<Object> changePassword(String username, int userId, String password, String changedPassword);
 
-    ResponseResult<Object> getUserDetails(HttpServletRequest request);
+    ResponseResult<Object> getUserDetails(String userId, String userId2);
 
-    ResponseResult<Object> changeNickname(HttpServletRequest request);
 
-    ResponseResult<Object> feedback(HttpServletRequest request);
+    ResponseResult<Object> changeNickname(String username, String user_id, String changedNickname);
 
-    ResponseResult<Object> uploadHeadPortrait(HttpServletRequest request, @RequestParam("file") MultipartFile file);
+    ResponseResult<Object> feedback(String userId, String feedback);
+
+
+    ResponseResult<Object> uploadHeadPortrait(String userId, MultipartFile file);
 }

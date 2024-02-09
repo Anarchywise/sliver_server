@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper
 public interface PostContentImagesDao extends BaseMapper<PostContentImages> {
 
-    @Select("select * from Content_Images where content_id = #{contentId}")
+    @Select("select * from post_content_images where content_id = #{contentId}")
     List<PostContentImages> selectByContentId(int contentId);
 }

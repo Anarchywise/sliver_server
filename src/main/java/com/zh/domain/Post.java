@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("Post")
 public class Post {
     Integer id;
     Integer userId;

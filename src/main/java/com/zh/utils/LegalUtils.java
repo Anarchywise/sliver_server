@@ -63,8 +63,6 @@ public class LegalUtils {
         // 编译正则表达式
         Pattern pattern = Pattern.compile(imageFileRegex);
 
-        // 编译正则表达式
-        pattern = Pattern.compile(imageFileRegex);
 
         // 匹配文件名
         Matcher matcher = pattern.matcher(fileName);

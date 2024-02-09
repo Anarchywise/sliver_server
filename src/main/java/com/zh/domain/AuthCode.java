@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("AuthCode")
 public class AuthCode {
     String phone;
     String authCode;

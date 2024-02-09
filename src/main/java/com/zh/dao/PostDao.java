@@ -11,10 +11,10 @@ import java.util.List;
 @Mapper
 public interface PostDao extends BaseMapper<Post>{
 
-    @Select("select * from Post where user_id = #{userId}")
+    @Select("select * from post where user_id = #{userId}")
     List<Post> getPostByUserId(int userId);
 
 
-    @Select("SELECT * FROM Post ORDER BY RAND() LIMIT #{num}")
+    @Select("SELECT * FROM post ORDER BY RAND() LIMIT #{num}")
     List<Post> getPostRandom(int num);
 }

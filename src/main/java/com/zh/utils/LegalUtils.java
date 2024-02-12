@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 public class LegalUtils {
 
-    private final static int PhoneNumLength = 11;
     private static final String PHONE_NUMBER_REGEX = "^1[3456789]\\d{9}$";
 
     private final static int PasswordMaxLength = 20;

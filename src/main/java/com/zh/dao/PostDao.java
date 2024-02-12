@@ -2,10 +2,8 @@ package com.zh.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zh.domain.Post;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-
 import java.util.List;
 
 @Mapper

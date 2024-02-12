@@ -1,6 +1,5 @@
 package com.zh.service;
 
-import com.zh.domain.AuthCode;
 import com.zh.domain.ResponseResult;
 import com.zh.domain.User;
 

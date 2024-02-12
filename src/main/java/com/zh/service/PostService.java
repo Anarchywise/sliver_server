@@ -1,7 +1,6 @@
 package com.zh.service;
 
 import com.zh.domain.ResponseResult;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 

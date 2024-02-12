@@ -22,7 +22,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Component
 public class JwtAuthenticationLoginFilter extends OncePerRequestFilter {
@@ -34,8 +33,8 @@ public class JwtAuthenticationLoginFilter extends OncePerRequestFilter {
     UserDao userDao;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request, @SuppressWarnings("null") HttpServletResponse response,
+                                    @SuppressWarnings("null") FilterChain filterChain)
             throws ServletException, IOException, ServletException
     {
 

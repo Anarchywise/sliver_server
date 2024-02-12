@@ -8,6 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class SliverDevFinalApplication {
 
     public static void main(String[] args) {
+        @SuppressWarnings("unused")
         ConfigurableApplicationContext run = SpringApplication.run(SliverDevFinalApplication.class, args);
         System.out.println("Spring boot is working");
     }

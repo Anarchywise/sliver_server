@@ -1,9 +1,7 @@
 package com.zh.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zh.dao.UserDao;
 import com.zh.domain.ResponseResult;
-import com.zh.domain.User;
 import com.zh.service.Impl.UserServiceImpl;
 import com.zh.utils.JsonUtils;
 import com.zh.utils.JwtUtils;
@@ -11,7 +9,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

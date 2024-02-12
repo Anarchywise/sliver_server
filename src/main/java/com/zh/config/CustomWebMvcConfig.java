@@ -15,7 +15,7 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
     private String customStaticResourcePath2;
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@SuppressWarnings("null") ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/post/images/**")
                 .addResourceLocations(customStaticResourcePath1);
 

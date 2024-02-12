@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
             return new ResponseResult<>(ResponseResult.WrongUserOrPassword, "用户名或密码错误", null);
         }
         //如果认证通过了,使用userid生成一个token,并保存
+        @SuppressWarnings("null")
         MyUserDetails loginUser = (MyUserDetails) authentication.getPrincipal();
         int userid = loginUser.getUser().getId();
         String token = userTokenService.saveUserToken(userid);

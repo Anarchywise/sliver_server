@@ -17,7 +17,6 @@ RUN mkdir /app/data/post
 RUN mkdir /app/data/post/images
 RUN mkdir /app/data/user
 RUN mkdir /app/data/user/headPortrait
-COPY ../../data /app/data
 
 # 暴露应用的端口（如果有需要）
 EXPOSE 8080

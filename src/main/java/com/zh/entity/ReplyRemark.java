@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class ReplyRemark {
     Integer id;
+    Integer userId;
     String userNickname;
     String userHeadPortraitUrl;
     String contentText;

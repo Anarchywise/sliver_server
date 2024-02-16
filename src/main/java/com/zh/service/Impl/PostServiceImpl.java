@@ -284,6 +284,7 @@ public class PostServiceImpl implements PostService {
                 replyRemark.setId(postRemark.getId());// id
                 User user = userDao.getById(postRemark.getUserId());
                 List<UserHeadPortrait> userHeadPortraits = userHeadPortraitDao.selectByUser_idUserHeadPortraitList(user.getId());
+                replyRemark.setUserId(user.getId());//userId
                 replyRemark.setUserNickname(user.getNickname());//nickname
                 replyRemark.setUserHeadPortraitUrl(userHeadPortraits.get(0).getUrl());//headportraiturl
                 replyRemark.setContentText(postRemark.getContentText());//contentText

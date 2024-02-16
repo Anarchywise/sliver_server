@@ -1,7 +1,7 @@
 package com.zh.controller;
 
-import com.zh.domain.ResponseResult;
-import com.zh.domain.User;
+import com.zh.entity.ResponseResult;
+import com.zh.entity.User;
 import com.zh.service.Impl.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

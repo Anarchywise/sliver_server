@@ -1,4 +1,4 @@
-package com.zh.domain;
+package com.zh.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,11 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class ReplyRemark {
     Integer id;
-    Integer userId;
-    String title;
+    String userNickname;
+    String userHeadPortraitUrl;
+    String contentText;
     Timestamp date;
-    Integer contentId;
+
 }

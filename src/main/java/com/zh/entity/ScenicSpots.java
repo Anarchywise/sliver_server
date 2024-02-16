@@ -1,7 +1,8 @@
-package com.zh.domain;
+package com.zh.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostContent {
+public class ScenicSpots {
+
     @TableId(type = IdType.AUTO)
     Integer id;
-    String contentText;
+    String positionName;
+    Float longitude;
+    Float latitude;
+    
 }

@@ -2,9 +2,9 @@ package com.zh.service.Impl;
 
 import com.zh.dao.UserDao;
 import com.zh.dao.UserHeadPortraitDao;
-import com.zh.domain.ResponseResult;
-import com.zh.domain.User;
-import com.zh.domain.UserHeadPortrait;
+import com.zh.entity.ResponseResult;
+import com.zh.entity.User;
+import com.zh.entity.UserHeadPortrait;
 import com.zh.service.UserService;
 import com.zh.utils.LegalUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,36 +49,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> getUserDetails(String userId, String userId2) {
+    public ResponseResult<Object> getUserDetails(Integer userId, Integer userIdSelf) {
 
-        if(userId==null){//没有查询其他用户,返回本人的信息
-            User user = userDao.getById(Integer.parseInt(userId2));
+        if(userId==userIdSelf){//如果是本人,返回本人的信息,不处理
+            User user = userDao.getById(userId);
             if(!userHeadPortraitDao.selectByUser_idUserHeadPortraitList(user.getId()).isEmpty()){
                 user.setHeadPortraitUrl(userHeadPortraitDao
                         .selectByUser_idUserHeadPortraitList(user.getId()).get(0).getUrl());
             }
             return new ResponseResult<>(ResponseResult.AccessOk, "获得用户信息", user);
         }else{
-            User user = userDao.getById(Integer.parseInt(userId));
+            User user = userDao.getById(userId);
+            if(Objects.isNull(user)) return new ResponseResult<>(ResponseResult.IllegalAction,"用户不存在",null);
             user.setPhone(null);
             user.setUsername(null);
             if(!userHeadPortraitDao.selectByUser_idUserHeadPortraitList(user.getId()).isEmpty()){
                 user.setHeadPortraitUrl(userHeadPortraitDao
                         .selectByUser_idUserHeadPortraitList(user.getId()).get(0).getUrl());
             }
-
             //BCryptPasswordEncoder不能被解密,看吧
             return new ResponseResult<>(ResponseResult.AccessOk, "获得用户信息", user);
         }
     }
 
     @Override
-    public ResponseResult<Object> changeNickname(String username, String userId, String changedNickname) {
+    public ResponseResult<Object> changeNickname(String username, int userId, String changedNickname) {
         User user = userDao.getByUsername(username);
         //判断用户是否存在
         if (Objects.isNull(user)) return new ResponseResult<>(ResponseResult.IllegalAction, "用户不存在", null);
         //用户信息是否和token一致
-        if (Integer.parseInt(userId) != user.getId())
+        if (userId != user.getId())
             return new ResponseResult<>(ResponseResult.IllegalAction, "用户名和token数据不匹配", null);
         //修改昵称
         ResponseResult<Object> result = null;
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> feedback(String userId, String feedback) {
+    public ResponseResult<Object> feedback(int userId, String feedback) {
 
         //构建文件路径
         String userDir = System.getProperty("user.dir"); // 获取当前工作目录
@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> uploadHeadPortrait(String userId, MultipartFile file){
+    public ResponseResult<Object> uploadHeadPortrait(int userId, MultipartFile file){
 
         try {
             // 获取文件名
@@ -149,11 +149,11 @@ public class UserServiceImpl implements UserService {
             String userDir = System.getProperty("user.dir"); // 获取当前工作目录
             String accessPath = null;//构建能够访问的路径
             if (originalFilename != null) {
-                accessPath = "/user/headPortrait/" + LegalUtils.buildAccessPath(Integer.parseInt(userId),originalFilename);
+                accessPath = "/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);
             }
             String relativePath = null;// 构建相对路径，不包含 JAR 文件的信息
             if (originalFilename != null) {
-                relativePath = "data/user/headPortrait/" + LegalUtils.buildAccessPath(Integer.parseInt(userId),originalFilename);
+                relativePath = "data/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);
             }
             String absolutePath = Paths.get(userDir, relativePath).toString(); // 将当前工作目录与相对路径结合，创建绝对路径
             System.out.println("userPortraitUploadFile Absolute Path: " + absolutePath);
@@ -172,10 +172,10 @@ public class UserServiceImpl implements UserService {
             file.transferTo(savedfile);
             //保存
             UserHeadPortrait userHeadPortrait = new UserHeadPortrait();
-            userHeadPortrait.setUser_id(Integer.parseInt(userId));// userId
+            userHeadPortrait.setUser_id(userId);// userId
             userHeadPortrait.setUrl(accessPath);// url
             List<UserHeadPortrait> userHeadPortraits = userHeadPortraitDao
-                    .selectByUser_idUserHeadPortraitList(Integer.parseInt(userId));
+                    .selectByUser_idUserHeadPortraitList(userId);
             if(userHeadPortraits.isEmpty()) {
                 userHeadPortraitDao.insert(userHeadPortrait);
             }else{

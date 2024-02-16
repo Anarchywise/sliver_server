@@ -1,7 +1,8 @@
 package com.zh.dao;
 
-import com.zh.domain.User;
 import org.apache.ibatis.annotations.*;
+
+import com.zh.entity.User;
 
 
 @Mapper

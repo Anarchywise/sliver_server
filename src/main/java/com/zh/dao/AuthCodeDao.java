@@ -1,7 +1,8 @@
 package com.zh.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zh.domain.AuthCode;
+import com.zh.entity.AuthCode;
+
 import org.apache.ibatis.annotations.*;
 
 @Mapper

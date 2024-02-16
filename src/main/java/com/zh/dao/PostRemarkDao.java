@@ -1,7 +1,8 @@
 package com.zh.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zh.domain.PostRemark;
+import com.zh.entity.PostRemark;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

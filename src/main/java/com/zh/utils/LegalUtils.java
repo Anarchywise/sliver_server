@@ -1,11 +1,11 @@
 package com.zh.utils;
 
-import com.zh.domain.ResponseResult;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.zh.entity.ResponseResult;
 
 public class LegalUtils {
 

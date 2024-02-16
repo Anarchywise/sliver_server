@@ -1,8 +1,9 @@
 package com.zh.service;
 
-import com.zh.domain.ResponseResult;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.zh.entity.ResponseResult;
 
 public interface PostService {
 

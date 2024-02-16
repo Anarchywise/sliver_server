@@ -1,8 +1,8 @@
 package com.zh.service.Impl;
 
-import com.zh.domain.ResponseResult;
-import com.zh.domain.User;
 import com.zh.config.MyUserDetails;
+import com.zh.entity.ResponseResult;
+import com.zh.entity.User;
 import com.zh.service.LoginService;
 import com.zh.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;

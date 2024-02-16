@@ -13,12 +13,6 @@ public class JwtUtils {
     private static final String SECRET_KEY = "sliverdev";
     private static final long EXPIRATION_TIME =  24*60*60*1000; // 24 hours in milliseconds
 
-    public static void main(String[] args) {
-        String token = generateJwtToken("userId123");
-        System.out.println("Generated JWT: " + token);
-        System.out.println(parseJwtToken(token));
-    }
-
     public static String generateJwtToken(String userId) {
         JwtBuilder builder = Jwts.builder()
                 .setId(userId) //用户id jti
@@ -40,4 +34,14 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    public static int getUserId(String token){
+        Claims claims = Jwts.parser()
+                            .setSigningKey(SECRET_KEY)
+                            .parseClaimsJws(token)
+                            .getBody();
+        return Integer.parseInt(claims.getId());
+        
+    }
+    
 }

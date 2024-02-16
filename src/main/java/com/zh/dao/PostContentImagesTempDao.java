@@ -1,7 +1,8 @@
 package com.zh.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zh.domain.PostContentImagesTemp;
+import com.zh.entity.PostContentImagesTemp;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -18,5 +19,5 @@ public interface PostContentImagesTempDao extends BaseMapper<PostContentImagesTe
     ArrayList<PostContentImagesTemp> selectByUserId(int user_id);
 
     @Delete("DELETE FROM post_content_images_temp WHERE user_id = #{userId} And image_Order = #{imageOrder}")
-    void deleteByUserIdAndImageOrder(int userId,int imageOrder);
+    boolean deleteByUserIdAndImageOrder(int userId,int imageOrder);
 }

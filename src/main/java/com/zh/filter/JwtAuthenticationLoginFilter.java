@@ -2,12 +2,14 @@ package com.zh.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zh.dao.UserDao;
-import com.zh.domain.ResponseResult;
-import com.zh.domain.User;
+import com.zh.entity.ResponseResult;
+import com.zh.entity.User;
 import com.zh.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,8 +55,7 @@ public class JwtAuthenticationLoginFilter extends OncePerRequestFilter {
         }catch (ExpiredJwtException e ){
             System.out.println("捕获到token过期异常");
             /// 构建未授权的响应
-            ResponseResult<String> unauthorizedResponse = new ResponseResult<>(
-                    ResponseResult.TokenOutdated, "token已过期", null);
+            ResponseResult<String> unauthorizedResponse = new ResponseResult<>(ResponseResult.TokenOutdated);
 
             // 将 ResponseResult 对象转换为 JSON 字符串
             String jsonResponse = new ObjectMapper().writeValueAsString(unauthorizedResponse);
@@ -65,8 +66,23 @@ public class JwtAuthenticationLoginFilter extends OncePerRequestFilter {
 
             // 将 JSON 写入响应
             response.getWriter().write(jsonResponse);
-            e.printStackTrace();
-            return;// 结束运行
+            return;
+        }catch(MalformedJwtException | SignatureException e){
+            // 捕获 Token 错误异常，可以在这里处理相关逻辑
+            System.out.println("捕获到token错误异常");
+            /// 构建token错误响应
+            ResponseResult<String> ErrorResponse = new ResponseResult<>(ResponseResult.Error,"token错误",null);
+
+            // 将 ResponseResult 对象转换为 JSON 字符串
+            String jsonResponse = new ObjectMapper().writeValueAsString(ErrorResponse);
+
+            // 设置响应的内容类型为 JSON
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            // 将 JSON 写入响应
+            response.getWriter().write(jsonResponse);
+            return;
         }
 
         user_id = claims.getId();

@@ -1,7 +1,7 @@
 package com.zh.service.Impl;
 
 import com.zh.dao.*;
-import com.zh.domain.*;
+import com.zh.entity.*;
 import com.zh.service.PostService;
 import com.zh.utils.LegalUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,7 +197,7 @@ public class PostServiceImpl implements PostService {
     public ResponseResult<Object> deleteUploadedImage(int imageOrder, int userId){
         try {
             //删掉imageOrder的记录
-            postContentImagesTempDao.deleteByUserIdAndImageOrder(userId,imageOrder);
+            if(!postContentImagesTempDao.deleteByUserIdAndImageOrder(userId,imageOrder)) return new ResponseResult<>(ResponseResult.Error,"删除失败",null);;
             //大于imageOrder的记录的imageOrder-1
             List<PostContentImagesTemp> contentImagesTempList = postContentImagesTempDao.selectByUserId(userId);
             for(PostContentImagesTemp contentImagesTemp : contentImagesTempList){

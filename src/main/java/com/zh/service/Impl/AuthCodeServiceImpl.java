@@ -1,8 +1,8 @@
 package com.zh.service.Impl;
 
 import com.zh.dao.AuthCodeDao;
-import com.zh.domain.AuthCode;
-import com.zh.domain.ResponseResult;
+import com.zh.entity.AuthCode;
+import com.zh.entity.ResponseResult;
 import com.zh.service.AuthCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

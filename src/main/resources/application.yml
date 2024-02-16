@@ -1,5 +1,5 @@
-spring:
-  #  servlet\u914D\u7F6E
+﻿spring:
+  #  servlet
   servlet:
     multipart:
       max-file-size: 10MB
@@ -8,7 +8,7 @@ spring:
   http:
     encoding: charset=UTF-8
 
-  # datasource \u6570\u636E\u6E90
+  # datasource 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://8.130.121.208/sliver_dev
@@ -21,19 +21,20 @@ spring:
       idleTimeout: 30000
       minimumIdle: 5
       maximumPoolSize: 10
-  # spring security \u5B89\u5168\u914D\u7F6E
+  # spring security 
   security:
     user:
       name: zhdiwnd
       password: 198105
 
 
-#\u8D44\u6E90\u5B58\u653E\u5904
+#WEb_Resource_Path
 custom:
   static:
     resource:
       path1: file:./data/post/images/
       path2: file:./data/user/headPortrait/
-# \u7AEF\u53E3\u914D\u7F6E
+
+# Tomcat_Server
 server:
   port: 8080

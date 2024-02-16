@@ -93,9 +93,9 @@ public class SecurityConfiguration {
 
 
         //授权配置
-        http.authorizeRequests()
+        http.authorizeRequests(requests ->requests
                 .requestMatchers("user/login","/user/attemptRegister", "/user/CodeRegister", "/user/loginJson","/userLogin").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated());
         //
         http.exceptionHandling((exception) -> exception.
                 authenticationEntryPoint(customAuthenticationEntryPoint));

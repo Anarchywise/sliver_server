@@ -1,7 +1,8 @@
 package com.zh.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zh.domain.PostLikes;
+import com.zh.entity.PostLikes;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

@@ -1,6 +1,6 @@
 package com.zh.service;
 
-import com.zh.domain.User_Token;
+import com.zh.entity.User_Token;
 
 public interface UserTokenService {
     void saveUserToken(User_Token userToken);

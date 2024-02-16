@@ -1,4 +1,4 @@
-package com.zh.domain;
+package com.zh.entity;
 
 import lombok.Data;
 

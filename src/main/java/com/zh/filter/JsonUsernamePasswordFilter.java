@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class JsonUsernamePasswordFilter extends UsernamePasswordAuthenticationFilter {
 
+    @SuppressWarnings("deprecation")
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 

@@ -2,9 +2,9 @@ package com.zh.service.Impl;
 
 import com.zh.dao.AuthCodeDao;
 import com.zh.dao.UserDao;
-import com.zh.domain.AuthCode;
-import com.zh.domain.ResponseResult;
-import com.zh.domain.User;
+import com.zh.entity.AuthCode;
+import com.zh.entity.ResponseResult;
+import com.zh.entity.User;
 import com.zh.service.AuthCodeService;
 import com.zh.service.LogoutService;
 import com.zh.utils.LegalUtils;

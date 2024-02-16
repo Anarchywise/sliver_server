@@ -1,4 +1,4 @@
-package com.zh.domain;
+package com.zh.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,7 @@ public class ResponseResult<T> {
     public final static int IllegalAction = 307;
     public final static int TokenOutdated = 308;
     public final static int Error = 309;
+    public final static int JsonError = 310;
     public final static int IllegalNickname = 310;
     public final static int WaitForAuthCode = 201;
     public final static int LoginOk = 101;
@@ -27,4 +28,22 @@ public class ResponseResult<T> {
     private int code;
     private String message;
     private T data;
+
+    public ResponseResult(int code) {
+        switch (code) {
+            case TokenOutdated:
+                this.code = code;
+                this.message = "token已过期";
+                break;
+    
+            case JsonError:
+                this.code = code;
+                this.message = "Json格式出错";
+                break;
+        
+            default:
+                break;
+        }
+    }
+    
 }

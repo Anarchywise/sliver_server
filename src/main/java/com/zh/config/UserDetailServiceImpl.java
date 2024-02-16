@@ -1,7 +1,8 @@
 package com.zh.config;
 
 import com.zh.dao.UserDao;
-import com.zh.domain.User;
+import com.zh.entity.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

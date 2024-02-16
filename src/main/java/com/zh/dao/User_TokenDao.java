@@ -1,10 +1,11 @@
 package com.zh.dao;
 
-import com.zh.domain.User_Token;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import com.zh.entity.User_Token;
 
 @Mapper
 public interface User_TokenDao {

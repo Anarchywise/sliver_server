@@ -1,7 +1,7 @@
 package com.zh.service.Impl;
 
 import com.zh.dao.User_TokenDao;
-import com.zh.domain.User_Token;
+import com.zh.entity.User_Token;
 import com.zh.service.UserTokenService;
 import com.zh.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;

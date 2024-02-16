@@ -2,7 +2,7 @@ package com.zh.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zh.config.MyUserDetails;
-import com.zh.domain.ResponseResult;
+import com.zh.entity.ResponseResult;
 import com.zh.service.UserTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

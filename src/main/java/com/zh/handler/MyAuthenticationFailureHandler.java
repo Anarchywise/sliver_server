@@ -1,7 +1,7 @@
 package com.zh.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zh.domain.ResponseResult;
+import com.zh.entity.ResponseResult;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

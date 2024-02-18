@@ -36,7 +36,7 @@ public class TravelServiceImpl implements TravelService{
             scenicSpots = scenicSpotsDao.selectById(citySpots.getSpotsId());
             ScenicSpotsList.add(scenicSpots);
         }
-        //重构返回的景点数据
+        //重构返回的景点数据(景点的线路)
         int index = 1;
         for(ScenicSpots scenicSpots: ScenicSpotsList){
             scenicSpots.setId(index);

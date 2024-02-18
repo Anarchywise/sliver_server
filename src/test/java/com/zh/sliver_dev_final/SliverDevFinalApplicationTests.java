@@ -1,5 +1,6 @@
 package com.zh.sliver_dev_final;
 
+import com.zh.dao.ScenicSpotsDao;
 import com.zh.dao.UserDao;
 import com.zh.utils.JwtUtils;
 import org.junit.jupiter.api.Test;
@@ -8,12 +9,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest
 class SliverDevFinalApplicationTests {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    ScenicSpotsDao scenicSpotsDao;
 
     @Test
     void test(){
@@ -50,6 +56,11 @@ class SliverDevFinalApplicationTests {
     }
     @Test
     void contextLoads() {
+        Map<String,Object> hs = new HashMap<>();
+        hs.put("position_name", "黄河石林");
+        System.out.println(scenicSpotsDao.selectByMap(hs));
+        System.out.println("比你好");
+        
     }
 
 }

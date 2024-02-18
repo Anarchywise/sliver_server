@@ -354,7 +354,7 @@ use for sliver_storm
             "id": 1, 旅游景点的顺序
             "positionName": "test7", 景点的名字
             "longitude": 7.0, 景点的经度
-            "latitude": 7.0 景点的纬度s
+            "latitude": 7.0 景点的纬度
         },
         {
             "id": 2,

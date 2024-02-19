@@ -34,6 +34,7 @@ custom:
     resource:
       path1: file:./data/post/images/
       path2: file:./data/user/headPortrait/
+      path3: file:./data/spotsPicture/
 
 # Tomcat_Server
 server:

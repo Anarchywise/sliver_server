@@ -40,6 +40,7 @@ public class TravelServiceImpl implements TravelService{
         int index = 1;
         for(ScenicSpots scenicSpots: ScenicSpotsList){
             scenicSpots.setId(index);
+            scenicSpots.setPictureUrl("/spotsPicture/"+scenicSpots.getPositionName()+".jpg");
             index++;
         }
 

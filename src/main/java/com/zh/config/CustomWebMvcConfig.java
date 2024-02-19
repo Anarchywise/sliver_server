@@ -14,6 +14,10 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
     @Value("${custom.static.resource.path2}")
     private String customStaticResourcePath2;
 
+    @Value("${custom.static.resource.path3}")
+    private String customStaticResourcePath3;
+
+
     @Override
     public void addResourceHandlers(@SuppressWarnings("null") ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/post/images/**")
@@ -21,6 +25,9 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/user/headPortrait/**")
                 .addResourceLocations(customStaticResourcePath2);
+
+        registry.addResourceHandler("/spotsPicture/**")
+                .addResourceLocations(customStaticResourcePath3);
     }
 
 }

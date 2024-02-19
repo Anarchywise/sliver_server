@@ -1,6 +1,6 @@
 package com.zh.sliver_dev_final;
 
-import com.zh.dao.ScenicSpotsDao;
+import com.zh.dao.SpotsDao;
 import com.zh.dao.UserDao;
 import com.zh.utils.JwtUtils;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class SliverDevFinalApplicationTests {
     private UserDao userDao;
 
     @Autowired
-    ScenicSpotsDao scenicSpotsDao;
+    SpotsDao scenicSpotsDao;
 
     @Test
     void test(){

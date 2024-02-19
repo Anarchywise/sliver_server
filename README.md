@@ -222,6 +222,7 @@ use for sliver_storm
 3. json上传格式:
    1. title        帖子标题
    2. contentText  帖子内容{文本}
+   3. type  帖子类型,没有设限制,随便写
 4. 返回上传结果
 
 
@@ -257,6 +258,43 @@ use for sliver_storm
         },
     ]
     ~~~
+
+
+## 获取最新的帖子,分页查询
+1. /post/getPostByPage
+2. Post
+3. json上传格式
+   1. current 当前查询了多少页,第一次访问写0
+   2. size 每页要查询多少个帖子
+4. 返回格式
+~~~html
+"data": [
+        {
+            "title": "及你太美", 帖子的标题
+            "type": "风景", 帖子类型
+            "userId": 1,  帖子发布者的id
+            "likes": 0,  帖子点赞数
+            "userNickname": "zhanghao", 帖子发布者的昵称
+            "userHeadPortraitUrl": "/user/headPortrait/$1$$20240209_080104$1706440868739.jpg", 帖子的所有者的头像url
+            "contentText": "hehhehehheeh", 帖子的呢容
+            "date": "2024-02-08T11:07:21.000+00:00",  UTC时间
+            "postId": 3, 帖子的id
+            "imagesUrls": []  帖子图片的url
+        },
+        {
+            "title": "及你太美",
+            "type": "cxk",
+            "userId": 1,
+            "likes": 0,
+            "userNickname": "zhanghao",
+            "userHeadPortraitUrl": "/user/headPortrait/$1$$20240209_080104$1706440868739.jpg",
+            "contentText": "hehhehehheeh",
+            "date": "2024-02-08T11:08:02.000+00:00",
+            "postId": 4,
+            "imagesUrls": []
+        },
+
+~~~
 
 ## 对帖子进行评论接口
 1. /post/uploadRemark  
@@ -342,6 +380,8 @@ use for sliver_storm
 
 
 # 旅游相关的接口
+
+## 获取旅游路线的接口
 1. /travel/getRoute 
 2. Post
 3. json上传格式
@@ -352,16 +392,34 @@ use for sliver_storm
    "data": [
         {
             "id": 1, 旅游景点的顺序
-            "positionName": "test7", 景点的名字
-            "longitude": 7.0, 景点的经度
-            "latitude": 7.0 景点的纬度
+            "spotsName": "官鹅沟国家森林公园", 景点的名字
+            "longitude": 104.376, 景点的经度
+            "latitude": 33.9676, 景点的纬度
+            "pictureUrl": "/spotsPicture/官鹅沟国家森林公园.jpg" 景点的预览图的url
         },
         {
             "id": 2,
-            "positionName": "test1",
-            "longitude": 1.0,
-            "latitude": 1.0
-        }
+            "spotsName": "崆峒山风景区",
+            "longitude": 112.604,
+            "latitude": 34.2399,
+            "pictureUrl": "/spotsPicture/崆峒山风景区.jpg"
+        },
     ]
     ~~~
+
+## 获取旅游景点介绍的接口
+1. /travel/getSpotsIntroduction
+2. Post
+3. json上传格式
+   1. spotsName 景点的名字
+4. 返回的格式
+~~~html
+   "data": [
+        {
+            "id": 10,
+            "spotsName": "黄河石林",
+            "spotsIntroduction": "黄河石林地处甘肃省白银市景泰县境内，距白银70公里，兰州160公里，中川机场120公里，宁夏沙坡头170公里，引产390公里，总面积约50平方公里，形成于距今210万年前下更新统五泉山组砾岩，是一处主要由新构造运动控制，雨洪冲蚀、重力崩塌和风蚀共同作用形成的地质地貌景观。它的形成演化过程清晰的记录了青藏高原抬升以来这一地区古地理环境的变迁，是具有国际典型意义、重大科学研究价值的砾岩石林地质景观；是一座集地貌地质、地质构造、自然景观和人文历史于一体的综合性地质遗迹，为甘肃省地质遗迹自然保护区、国家级地质公园。"
+        }
+    ]
+~~~
 

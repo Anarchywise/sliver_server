@@ -2,9 +2,9 @@ package com.zh.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import com.zh.entity.ScenicSpots;
+import com.zh.entity.Spots;
 
 @Mapper
-public interface ScenicSpotsDao extends BaseMapper<ScenicSpots> {
+public interface SpotsDao extends BaseMapper<Spots> {
     
 }

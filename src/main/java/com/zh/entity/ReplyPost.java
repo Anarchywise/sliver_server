@@ -9,6 +9,7 @@ import java.util.List;
 public class ReplyPost {
     Integer PostId;
     String title;
+    String type;
     Integer userId;
     Integer likes;
     String userNickname;

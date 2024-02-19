@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zh.entity.ResponseResult;
+import com.zh.entity.SpotsIntroduction;
 import com.zh.service.Impl.TravelServiceImpl;
 import com.zh.utils.JsonUtils;
 
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -35,5 +38,13 @@ public class TravelControler {
         }
 
     }
+
+    @PostMapping("/travel/getSpotsIntroduction")
+    public ResponseResult<Object> getSpotsIntroduction(@RequestBody SpotsIntroduction spotsIntroduction) {
+        //TODO: process POST request
+        return travelServiceImpl.getSpotsIntroduction(spotsIntroduction.getSpotsName());
+    }
+    
+    
     
 }

@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class PostController {
@@ -34,17 +37,18 @@ public class PostController {
         if (jsonNode == null) return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
         String title = null;
         String contentText = null;
+        String type = null;
         try {
             title = jsonNode.get("title").asText();
             contentText = jsonNode.get("contentText").asText();
+            type = jsonNode.get("type").asText();
+            //获取请求信息
+            String token = request.getHeader("token");
+            int userId = JwtUtils.getUserId(token);
+            return postService.acceptPost(userId, title, contentText,type);
         } catch (Exception e) {
             return new ResponseResult<>(ResponseResult.Error, "json格式出错", null);
-        }
-
-        //获取请求信息
-        String token = request.getHeader("token");
-        int userId = JwtUtils.getUserId(token);
-        return postService.acceptPost(userId, title, contentText);
+        }        
     }
 
     @PostMapping("/post/getUserPost")
@@ -149,13 +153,12 @@ public class PostController {
         if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
         int postId;
         try {
-            postId = Integer.parseInt(jsonNode.get("postId").asText());
+            postId = jsonNode.get("postId").asInt();
+            int userId = JwtUtils.getUserId(token);
+        return postService.postCollect(postId, userId);
         }catch (Exception e){
             return new ResponseResult<>(ResponseResult.JsonError);
         }
-        
-        int userId = JwtUtils.getUserId(token);
-        return postService.postCollect(postId, userId);
     }
 
     @GetMapping("/post/getUserCollect")
@@ -163,4 +166,21 @@ public class PostController {
         int userId = JwtUtils.getUserId(token);
         return postService.getUserPostCollects(userId);
     }
+
+    @PostMapping("/post/getPostByPage")
+    public ResponseResult<Object> getPostByPage(HttpServletRequest request) {
+        //获取json数据
+        JsonNode jsonNode = JsonUtils.parseRequest(request);
+        if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
+        Integer current;
+        Integer size; 
+        try {
+            current = jsonNode.get("current").asInt();
+            size = jsonNode.get("size").asInt();
+            return postService.getPostByPage(current, size);
+        }catch (Exception e){
+            return new ResponseResult<>(ResponseResult.JsonError);
+        }
+    }
+    
 }

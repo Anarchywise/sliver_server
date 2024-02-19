@@ -1,5 +1,7 @@
 package com.zh.service;
 
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +11,7 @@ public interface PostService {
 
     ResponseResult<Object> uploadPostContentImages(int userId, @RequestParam("file") MultipartFile file);
 
-    ResponseResult<Object> acceptPost(int userId, String title, String contentText);
+    public ResponseResult<Object> acceptPost(int userId, String title, String contentText,String type);
 
     ResponseResult<Object> getPostByUserId(int userId);
 
@@ -30,4 +32,6 @@ public interface PostService {
     ResponseResult<Object> postCollect(int postId, int userId);
 
     ResponseResult<Object> getUserPostCollects(int userId);
+
+    ResponseResult<Object> getPostByPage(int current,int size);
 }

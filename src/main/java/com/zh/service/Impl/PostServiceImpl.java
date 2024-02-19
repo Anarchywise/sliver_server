@@ -1,5 +1,8 @@
 package com.zh.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zh.dao.*;
 import com.zh.entity.*;
 import com.zh.service.PostService;
@@ -15,7 +18,9 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 @Service
@@ -47,6 +52,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     PostRemarkDao postRemarkDao;
+
+    @Autowired
+    PostTypeDao postTypeDao;
 
     @Override
     public ResponseResult<Object> uploadPostContentImages(int userId, @RequestParam("file") MultipartFile file) {
@@ -111,7 +119,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResponseResult<Object> acceptPost(int userId, String title, String contentText) {
+    public ResponseResult<Object> acceptPost(int userId, String title, String contentText,String type) {
         //从ImagesTemp中获取user_id对应的Images
         try {
             List<PostContentImagesTemp> contentImagesTempList = postContentImagesTempDao.selectByUserId(userId);
@@ -144,6 +152,11 @@ public class PostServiceImpl implements PostService {
             Timestamp timestamp = new Timestamp(currentDate.getTime());
             post.setDate(timestamp);// TimeStamp
             postDao.insert(post);
+            //插入postType中的数据
+            PostType postType = new PostType();
+            postType.setPostId(post.getId());
+            postType.setType(type);
+            postTypeDao.insert(postType);
             return new ResponseResult<>(ResponseResult.AccessOk,"帖子上传成功",post);
 
         }catch (Exception e ){
@@ -323,4 +336,61 @@ public class PostServiceImpl implements PostService {
             return new ResponseResult<>(ResponseResult.Error, "服务器?出错", null);
         }
     }
+
+    @Override
+    public ResponseResult<Object> getPostByPage(int current,int size ) {
+        // TODO Auto-generated method stub
+        try{
+            // 构建查询条件
+            QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+         //   queryWrapper.orderByDesc("date");//按时间降序排序
+            // 创建分页对象 
+            Page<Post> page = new Page<>(current+1, size,true);
+
+            // 执行查询
+            IPage<Post> postPage = postDao.selectPage(page, queryWrapper);
+            List<Post> postList = postPage.getRecords();
+            List<ReplyPost> replyPosts = new ArrayList<>();
+            PostContent postContent = new PostContent();
+            List<PostContentImages> contentImages = new ArrayList<>();
+            //对要返回的数据重新构造
+            // 输出查询条件
+            System.out.println("Query Wrapper: " + queryWrapper.toString());
+            // 输出分页信息
+            System.out.println("Total: " + postPage.getTotal());
+            System.out.println("Current Page: " + postPage.getCurrent());
+            System.out.println("Page Size: " + postPage.getSize());
+            for(Post post: postList){
+                User user = userDao.getById(post.getUserId());
+                ReplyPost replyPost = new ReplyPost();
+                postContent = postContentDao.selectById(post.getContentId());
+                contentImages = postContentImagesDao.selectByContentId(post.getContentId());
+                replyPost.setPostId(post.getId()); // PostId
+                replyPost.setTitle(post.getTitle()); // title
+                replyPost.setContentText(postContent.getContentText()); //contentText
+                replyPost.setUserId(user.getId());//userId
+                replyPost.setUserNickname(user.getNickname());// userNickname
+                replyPost.setUserHeadPortraitUrl(userHeadPortraitDao
+                        .selectByUser_idUserHeadPortraitList(user.getId()).get(0).getUrl());//用户头像url
+                replyPost.setLikes(postLikesDao.selectCountByPostId(post.getId()));// likes 点赞数
+                replyPost.setDate(post.getDate());// date
+                List<String> imagesUrls = contentImages.stream()
+                        .map(PostContentImages::getUrl)
+                        .toList();
+                replyPost.setImagesUrls(imagesUrls);// postimagesUrls
+                Map<String,Object> postIdMap = new HashMap<>();
+                postIdMap.put("post_id",post.getId());
+                replyPost.setType(postTypeDao.selectByMap(postIdMap).get(0).getType());//postType
+                replyPosts.add(replyPost);
+            }
+            return new ResponseResult<>(ResponseResult.AccessOk,"获得帖子成功",replyPosts);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseResult<>(ResponseResult.Error,"服务器?出错",null);
+        }
+
+    }
+
+    
+
 }

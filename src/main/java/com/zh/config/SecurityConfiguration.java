@@ -94,7 +94,7 @@ public class SecurityConfiguration {
 
         //授权配置
         http.authorizeRequests(requests ->requests
-                .requestMatchers("user/login","/user/attemptRegister", "/user/CodeRegister", "/user/loginJson","/userLogin").permitAll()
+                .requestMatchers("user/login","/user/attemptRegister", "/user/CodeRegister", "/user/loginJson","/userLogin","/post/images/**","/spotsPicture/**","/user/headPortrait/**").permitAll()
                 .anyRequest().authenticated());
         //
         http.exceptionHandling((exception) -> exception.

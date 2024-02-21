@@ -7,6 +7,8 @@ import com.zh.entity.User;
 import com.zh.entity.UserHeadPortrait;
 import com.zh.service.UserService;
 import com.zh.utils.LegalUtils;
+import com.zh.utils.PictureUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import java.io.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Service
@@ -138,39 +140,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseResult<Object> uploadHeadPortrait(int userId, MultipartFile file){
+    public ResponseResult<Object> uploadHeadPortrait(int userId, MultipartFile getFile){
 
-        try {
+        
             // 获取文件名
-            String originalFilename = file.getOriginalFilename();
+            String originalFilename = getFile.getOriginalFilename();
+
             //判断是否合法
             if(LegalUtils.isImageFileName(originalFilename)!=null) return LegalUtils.isImageFileName(originalFilename);
+
+            //压缩图片
+            byte[] compressedImage;
+            try {
+                compressedImage = PictureUtils.compressImage(getFile.getBytes());
+            } catch (IOException e) {
+                System.out.println("压缩图片失败");
+                return new ResponseResult<>(ResponseResult.Error, "压缩图片失败", null);
+            }
             //构建文件路径
             String userDir = System.getProperty("user.dir"); // 获取当前工作目录
-            String accessPath = null;//构建能够访问的路径
-            if (originalFilename != null) {
-                accessPath = "/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);
-            }
-            String relativePath = null;// 构建相对路径，不包含 JAR 文件的信息
-            if (originalFilename != null) {
-                relativePath = "data/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);
-            }
+            String accessPath = "/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);//构建能够访问的路径
+            String relativePath = "data/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);// 构建相对路径，不包含 JAR 文件的信息
             String absolutePath = Paths.get(userDir, relativePath).toString(); // 将当前工作目录与相对路径结合，创建绝对路径
             System.out.println("userPortraitUploadFile Absolute Path: " + absolutePath);
             System.out.println("userPortraitAccessPath: " + accessPath);
 
             // 保存文件到服务器
-            // 检查文件是否存在，如果不存在则创建
-            File savedfile = new File(absolutePath);
-            if (!savedfile.exists()) {
-                if (savedfile.createNewFile()) {
-                    System.out.println("File created successfully.");
-                } else {
-                    System.out.println("Failed to create file.");
-                }
+            try {
+                Files.createDirectories(Paths.get(absolutePath).getParent());
+                Files.write(Paths.get(absolutePath), compressedImage);
+                System.out.println("File saved successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to save file.");
+                return new ResponseResult<>(ResponseResult.Error, "保存文件失败", null);
             }
-            file.transferTo(savedfile);
-            //保存
+
+            //保存到数据库
             UserHeadPortrait userHeadPortrait = new UserHeadPortrait();
             userHeadPortrait.setUser_id(userId);// userId
             userHeadPortrait.setUrl(accessPath);// url
@@ -183,11 +189,6 @@ public class UserServiceImpl implements UserService {
                 userHeadPortraitDao.updateById(userHeadPortrait);
             }
 
-
             return new ResponseResult<>(ResponseResult.AccessOk,"上传成功",null);
-        }catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseResult<>(ResponseResult.Error, "服务器出错", null);
-        }
     }
 }

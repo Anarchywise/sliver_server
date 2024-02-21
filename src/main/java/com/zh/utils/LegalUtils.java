@@ -5,15 +5,28 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.zh.entity.ResponseResult;
 
+@Component
 public class LegalUtils {
 
     private static final String PHONE_NUMBER_REGEX = "^1[3456789]\\d{9}$";
 
-    private final static int PasswordMaxLength = 20;
+    private static int passwordMaxLength;
+    private static int nicknameMaxLength;
 
-    private final static int NicknameMaxLength = 10;
+    @Value("${custom.password.passwordMaxLength}")
+    public void setPasswordMaxLength(int passwordMaxLength) {
+        LegalUtils.passwordMaxLength = passwordMaxLength;
+    }
+
+    @Value("${custom.nickName.nicknameMaxLength}")
+    public void setNicknameMaxLength(int nicknameMaxLength) {
+        LegalUtils.nicknameMaxLength = nicknameMaxLength;
+    }
 
 
     public static ResponseResult<Object> verifyPhone(String phoneNumber){
@@ -39,7 +52,7 @@ public class LegalUtils {
             return new ResponseResult<>(ResponseResult.IllegalPassword, "密码不符合规定", null);
         }
         //2.检查字符是否超过20位
-        if (password.length() > PasswordMaxLength) {
+        if (password.length() > passwordMaxLength) {
             return new ResponseResult<>(ResponseResult.IllegalPassword, "密码不符合规定", null);
         }
 
@@ -47,7 +60,7 @@ public class LegalUtils {
     }
 
     public static ResponseResult<Object> verifyNickname(String nickname){
-        if(nickname.length()>NicknameMaxLength) return new ResponseResult<>(ResponseResult.IllegalNickname, "昵称不符合规定", null);
+        if(nickname.length()>nicknameMaxLength) return new ResponseResult<>(ResponseResult.IllegalNickname, "昵称不符合规定", null);
         return null;
     }
 
@@ -56,9 +69,6 @@ public class LegalUtils {
         System.out.println(fileName);
         String imageFileRegex = "\\.(?i)(jpg|jpeg|png|gif|bmp)$";
 
-        // 替换正则表达式中的 $ 为 \\$
-        imageFileRegex = imageFileRegex.replace("$", "\\$");
-
         // 编译正则表达式
         Pattern pattern = Pattern.compile(imageFileRegex);
 
@@ -66,9 +76,14 @@ public class LegalUtils {
         // 匹配文件名
         Matcher matcher = pattern.matcher(fileName);
 
-        // 返回匹配结果
-        if(matcher.find()) return new ResponseResult<>(ResponseResult.Error,"图片格式不支持",null);
-        return null;
+        if (matcher.find()) {
+            System.out.println("Matched!");
+            return null;
+        } else {
+            System.out.println("Not matched.");
+            return new ResponseResult<>(ResponseResult.Error,"图片格式不支持",null);
+        }
+        
     }
 
     public static String buildAccessPath(long userId, String originalFilename) {

@@ -15,19 +15,20 @@ import java.io.IOException;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 
-
-
     /**
      * 认证失败处理类 返回未授权
      * 用来解决匿名用户访问无权限资源时的异常
+     * 
+     * 当资源返回null时,会触发org.springframework.security.authentication.InsufficientAuthenticationException
      */
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response,
                              AuthenticationException e)
                 throws IOException {
-            /// 构建未授权的响应
+            System.out.println("捕获到未知错误"+e.getClass().getName());
+            // 构建未授权的响应
             ResponseResult<String> unauthorizedResponse = new ResponseResult<>(
-                    ResponseResult.Unauthenticated, "未授权", null);
+                    ResponseResult.Unauthenticated, "未授权", e.getClass().getName());
 
             // 将 ResponseResult 对象转换为 JSON 字符串
             String jsonResponse = new ObjectMapper().writeValueAsString(unauthorizedResponse);

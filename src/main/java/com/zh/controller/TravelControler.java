@@ -11,6 +11,7 @@ import com.zh.utils.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,16 +28,9 @@ public class TravelControler {
         //TODO: process POST request
         //获取请求中的json数据
         JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
-        try {
-            String cityName = jsonNode.get("cityName").asText(); 
-            int num = jsonNode.get("num").asInt();
-            return travelServiceImpl.getTravelRoute(cityName, num);
-        } catch (Exception e) {
-            System.out.println("解析错误");
-            return new ResponseResult<>(ResponseResult.JsonError);
-        }
-
+        String cityName = jsonNode.get("cityName").asText(); 
+        int num = jsonNode.get("num").asInt();
+        return travelServiceImpl.getTravelRoute(cityName, num);
     }
 
     @PostMapping("/travel/getSpotsIntroduction")

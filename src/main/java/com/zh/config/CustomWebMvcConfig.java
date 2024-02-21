@@ -8,13 +8,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CustomWebMvcConfig implements WebMvcConfigurer {
 
-    @Value("${custom.static.resource.path1}")
+    @Value("${custom.web.resource.path1}")
     private String customStaticResourcePath1;
 
-    @Value("${custom.static.resource.path2}")
+    @Value("${custom.web.resource.path2}")
     private String customStaticResourcePath2;
 
-    @Value("${custom.static.resource.path3}")
+    @Value("${custom.web.resource.path3}")
     private String customStaticResourcePath3;
 
 

@@ -30,12 +30,24 @@
 
 #WEb_Resource_Path
 custom:
-  static:
+  web:
     resource:
       path1: file:./data/post/images/
       path2: file:./data/user/headPortrait/
       path3: file:./data/spotsPicture/
+  jwt:
+    secretKey: sliverdev
+    expirationTime: 604800   #7*24*60*60 7*24h unit:s
 
+  pictureCompress:
+    targetSizeKB: 256 
+    quality: 0.8 # 0.0 to 1.0
+
+  password:
+    passwordMaxLength: 20
+
+  nickName:
+    nicknameMaxLength: 10
 # Tomcat_Server
 server:
   port: 8080

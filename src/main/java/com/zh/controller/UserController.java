@@ -20,13 +20,12 @@ public class UserController {
     public ResponseResult<Object> getUserDetail(HttpServletRequest request){
         //获取请求中的json数据
         JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
         String token = request.getHeader("token");
         int userIdSelf = JwtUtils.getUserId(token);
         Integer userId = null;
         try {
             userId = jsonNode.get("userId").asInt();
-        }catch (Exception e){
+        }catch (NullPointerException e){
             userId = userIdSelf;
         }
         return userService.getUserDetails(userId,userIdSelf);
@@ -37,17 +36,9 @@ public class UserController {
         String token = request.getHeader("token");
         //获取请求中的json数据
         JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
-        String username = null;
-        String password = null;
-        String changedPassword = null;
-        try {
-            username = jsonNode.get("username").asText();
-            password = jsonNode.get("password").asText();
-            changedPassword = jsonNode.get("changedPassword").asText();
-        }catch (Exception e){
-            return new ResponseResult<>(ResponseResult.JsonError);
-        }
+        String username = jsonNode.get("username").asText();
+        String password = jsonNode.get("password").asText();
+        String changedPassword = jsonNode.get("changedPassword").asText();
         int userId = JwtUtils.getUserId(token);
         return userService.changePassword(username,userId,password,changedPassword);
     }
@@ -57,15 +48,8 @@ public class UserController {
         String token = request.getHeader("token");
         //获取请求中的json数据
         JsonNode jsonNode = JsonUtils.parseRequest(request);
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
-        String username = null;
-        String changedNickname =null;
-        try {
-            username = jsonNode.get("username").asText();
-            changedNickname = jsonNode.get("changedNickname").asText();
-        }catch (Exception e){
-            return new ResponseResult<>(ResponseResult.JsonError);
-        }
+        String username = jsonNode.get("username").asText();
+        String changedNickname = jsonNode.get("changedNickname").asText();
         int userId = JwtUtils.getUserId(token);
         return userService.changeNickname(username,userId,changedNickname);
     }
@@ -77,18 +61,11 @@ public class UserController {
         int userId = JwtUtils.getUserId(token);
         //获取请求中的json数据
         JsonNode jsonNode = JsonUtils.parseRequest(request);
-        String feedback = null;
-        if (jsonNode == null) return new ResponseResult<>(ResponseResult.JsonError);
-        try {
-            feedback = jsonNode.get("feedback").asText();
-        }catch (Exception e){
-            return new ResponseResult<>(ResponseResult.JsonError);
-        }
-
+        String feedback = jsonNode.get("feedback").asText();
         return userService.feedback(userId,feedback);
     }
 
-    @PostMapping("/user/uploadHeadPortrait")
+     @PostMapping("/user/uploadHeadPortrait")
     public ResponseResult<Object> uploadHeadPortrait(HttpServletRequest request, @RequestParam("file") MultipartFile file){
         if (file.isEmpty()) {
             return new ResponseResult<>(ResponseResult.Error, "上传图片为空", null);

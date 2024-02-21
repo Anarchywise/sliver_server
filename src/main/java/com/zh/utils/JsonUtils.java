@@ -8,6 +8,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class JsonUtils {
     public static JsonNode parseRequest(HttpServletRequest request){
         StringBuilder stringBuilder = new StringBuilder();
@@ -18,7 +21,7 @@ public class JsonUtils {
                 stringBuilder.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         String jsonBody = stringBuilder.toString();
@@ -30,7 +33,7 @@ public class JsonUtils {
             // 现在你可以使用 jsonNode 处理 JSON 数据
             // 例如：String value = jsonNode.get("key").asText();
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         return null;
     }

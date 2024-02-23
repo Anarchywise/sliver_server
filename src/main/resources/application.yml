@@ -50,4 +50,4 @@ custom:
     nicknameMaxLength: 10
 # Tomcat_Server
 server:
-  port: 8080
+  port: 3455

@@ -215,6 +215,12 @@ use for sliver_storm
    }
 ~~~
 
+## 删除已上传的图片的接口
+1. /post/deleteUploadedImage
+2. Post
+3. json格式
+    1. imageOrder 第几张图片   已上传123, 删除第2张后,本地的为12,要继续删除原来的第3张,则为2
+
 
 ## 上传帖子接口  {如果上传图片后没有上传帖子,会有问题,建议上传图片和帖子一次性上传}
 1. /post/upload 

@@ -35,13 +35,15 @@ public class PictureUtils {
             .toOutputStream(outputStream);
 
     // 循环进行压缩，直到目标大小
-    while (outputStream.size() > targetSizeKB * 1024) {
+    double qualityTemp = quality;
+    while (outputStream.size() > targetSizeKB * 1024 && qualityTemp>0.1) {
         outputStream.reset();
-        quality -= 0.1;
+        qualityTemp -= 0.1;
+        System.out.println(qualityTemp);
         Thumbnails.of(new ByteArrayInputStream(originalImage))
                 .outputFormat("jpg")
                 .scale(1.0)
-                .outputQuality(quality)
+                .outputQuality(qualityTemp)
                 .toOutputStream(outputStream);
     }
 

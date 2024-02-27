@@ -171,7 +171,7 @@ use for sliver_storm
 # 帖子相关接口
 
 ## 帖子的图片上传接口
-1. /post/uploadedImages 
+1. /post/uploadImages 
 2. Post
 3. 一次只能上传一个图片
 4. 上传参照格式:
@@ -223,7 +223,7 @@ use for sliver_storm
 
 
 ## 上传帖子接口  {如果上传图片后没有上传帖子,会有问题,建议上传图片和帖子一次性上传}
-1. /post/upload 
+1. /post/uploadPost 
 2. Post
 3. json上传格式:
    1. title        帖子标题
@@ -231,6 +231,9 @@ use for sliver_storm
    3. type  帖子类型,没有设限制,随便写
 4. 返回上传结果
 
+## 查询已上传的帖子图片的接口
+1. /post/uploadedImages
+2. Get
 
 ## 获取某个用户的帖子
 1. /post/getUserPost 

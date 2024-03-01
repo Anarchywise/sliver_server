@@ -95,7 +95,7 @@ public class LegalUtils {
         String sanitizedFilename = originalFilename.replaceAll("[^a-zA-Z0-9.-]", "_");
 
         // 构建路径
-        String accessPath = "$" + userId + "$" + "$" + formattedDate + "$" + sanitizedFilename;
+        String accessPath = "__" + userId + "__" + "$" + formattedDate + "__" + sanitizedFilename;
         return accessPath;
     }
 

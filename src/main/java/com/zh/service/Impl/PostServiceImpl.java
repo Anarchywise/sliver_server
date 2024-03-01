@@ -78,7 +78,7 @@ public class PostServiceImpl implements PostService {
 
             // 构建文件路径
             String userDir = System.getProperty("user.dir"); // 获取当前工作目录
-            String accessPath = "/post/images/" + LegalUtils.buildAccessPath(userId, originalFilename);
+            String accessPath = "http://39.101.67.214:8080/post/images/" + LegalUtils.buildAccessPath(userId, originalFilename);
             String relativePath = "data/post/images/" + LegalUtils.buildAccessPath(userId, originalFilename);
             String absolutePath = Paths.get(userDir, relativePath).toString(); // 将当前工作目录与相对路径结合，创建绝对路径
             System.out.println("postUploadFile Absolute Path: " + absolutePath);

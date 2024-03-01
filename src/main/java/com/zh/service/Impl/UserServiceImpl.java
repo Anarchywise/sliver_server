@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
             }
             //构建文件路径
             String userDir = System.getProperty("user.dir"); // 获取当前工作目录
-            String accessPath = "/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);//构建能够访问的路径
+            String accessPath = "http://39.101.67.214:8080/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);//构建能够访问的路径
             String relativePath = "data/user/headPortrait/" + LegalUtils.buildAccessPath(userId,originalFilename);// 构建相对路径，不包含 JAR 文件的信息
             String absolutePath = Paths.get(userDir, relativePath).toString(); // 将当前工作目录与相对路径结合，创建绝对路径
             System.out.println("userPortraitUploadFile Absolute Path: " + absolutePath);

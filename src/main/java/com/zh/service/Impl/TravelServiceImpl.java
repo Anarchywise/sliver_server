@@ -48,6 +48,11 @@ public class TravelServiceImpl implements TravelService{
         for(Spots scenicSpots: ScenicSpotsList){
             scenicSpots.setId(index);
             scenicSpots.setPictureUrl("/spotsPicture/"+scenicSpots.getSpotsName()+".jpg");
+            Map<String,Object> nameMap = new HashMap<>();
+            nameMap.put("spots_name", scenicSpots.getSpotsName());
+            List<SpotsIntroduction> spotsIntroductions = new ArrayList<>();
+            spotsIntroductions = spotsIntroductionDao.selectByMap(nameMap);
+            if(!spotsIntroductions.isEmpty()) scenicSpots.setIntroduction(spotsIntroductions.get(0).getSpotsIntroduction());
             index++;
         }
 

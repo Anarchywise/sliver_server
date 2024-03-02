@@ -20,5 +20,7 @@ public class Spots {
     Float latitude;
     @TableField(exist = false)
     String pictureUrl;
+    @TableField(exist = false)
+    String introduction;
     
 }

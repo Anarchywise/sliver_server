@@ -405,6 +405,7 @@ use for sliver_storm
             "longitude": 104.376, 景点的经度
             "latitude": 33.9676, 景点的纬度
             "pictureUrl": "/spotsPicture/官鹅沟国家森林公园.jpg" 景点的预览图的url
+            "introduction": 介绍
         },
         {
             "id": 2,
@@ -412,6 +413,7 @@ use for sliver_storm
             "longitude": 112.604,
             "latitude": 34.2399,
             "pictureUrl": "/spotsPicture/崆峒山风景区.jpg"
+            "introduction": 介绍
         },
     ]
     ~~~
